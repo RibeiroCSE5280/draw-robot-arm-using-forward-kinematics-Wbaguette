@@ -1,5 +1,3 @@
-# coding: utf-8
-
 from vedo import *
 import numpy as np
 
