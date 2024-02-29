@@ -17,6 +17,8 @@ class TestRobotArm(unittest.TestCase):
 		L1, L2, L3, L4 = [5, 8, 3, 0]
 		Phi = np.array([30, -50, -30, 0])
 		T_01, T_02, T_03, T_04, e = forward_kinematics(Phi, L1, L2, L3, L4)
+  
+		print(e)
 		
 		actual = e
 		expected = np.array([18.47772028, -0.71432837,  0. ])
@@ -29,6 +31,9 @@ class TestRobotArm(unittest.TestCase):
 		L1, L2, L3, L4 = [5, 8, 3, 0]
 		Phi = np.array([0, 0, 0, 0])
 		T_01, T_02, T_03, T_04, e = forward_kinematics(Phi, L1, L2, L3, L4)
+  
+		print(e)
+  
 		
 		actual = e
 		expected = np.array([21, 2,  0. ])
@@ -42,6 +47,9 @@ class TestRobotArm(unittest.TestCase):
 		Phi = np.array([-30, 50, 30, 0])
 		T_01, T_02, T_03, T_04, e = forward_kinematics(Phi, L1, L2, L3, L4)
 		
+		print(e)
+
+ 
 		actual = e
 		expected = np.array([18.47772028,  4.71432837,  0. ])
 

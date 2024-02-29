@@ -132,7 +132,7 @@ def main():
   # Create the coordinate frame mesh and transform
   Frame1Arrows = createCoordinateFrameMesh()
   # Matrix of Frame 1 (written w.r.t. Frame 0, which is the previous frame) 
-  R_01 = RotationMatrix(phi1, axis_name = 'y')   # Rotation matrix
+  R_01 = RotationMatrix(phi1, axis_name = 'z')   # Rotation matrix
   p1 = np.array([[3], [2], [0.0]])                # Frame's origin (w.r.t. previous frame)
   t_01 = p1                                      # Translation vector
   
@@ -199,7 +199,7 @@ def main():
   
   
   # Matrix of Frame 3 (written w.r.t. Frame 2, which is the previous frame) 	
-  R_23 = RotationMatrix(phi3, axis_name = 'y')   # Rotation matrix
+  R_23 = RotationMatrix(phi3, axis_name = 'z')   # Rotation matrix
   p3 = np.array([[L2 + (2*radius)],[0.0], [0.0]])           # Frame's origin (w.r.t. previous frame)
   t_23 = p3                                      # Translation vector
   
