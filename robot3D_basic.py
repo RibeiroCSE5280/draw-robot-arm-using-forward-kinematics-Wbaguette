@@ -110,13 +110,24 @@ def main():
   # Lengths of arm parts 
   L1 = 5   # Length of link 1
   L2 = 8   # Length of link 2
-  L3 = 6   # Length of link 3 
+  L3 = 3   # Length of link 3 
 
   # Joint angles 
   phi1 = 30     # Rotation angle of part 1 in degrees
   phi2 = -10    # Rotation angle of part 2 in degrees
   phi3 = 15     # Rotation angle of part 3 in degrees
   phi4 = 0      # Rotation angle of the end-effector in degrees
+  
+  
+  # Make a base in order to better visualize stuff
+  base_mesh = Box(pos=(2.5,0.4,0),
+                  length = 2,
+                  height = 2,
+                  c="green",
+                  alpha=1,
+                  # axis=(1,0,0)
+                  )
+  
   
   # Matrix of Frame 1 (written w.r.t. Frame 0, which is the previous frame) 
   R_01 = RotationMatrix(phi1, axis_name = 'z')   # Rotation matrix
@@ -199,8 +210,16 @@ def main():
   
   # Create the coordinate frame mesh and transform. This point is the end-effector. So, I am 
   # just creating the coordinate frame. 
-  Frame3 = createCoordinateFrameMesh()
+  Frame3Arrows = createCoordinateFrameMesh()
+  link3_mesh = Cylinder(r=0.4, 
+                        height=L3, 
+                        pos = (L3/2,0,0),
+                        c="blue", 
+                        alpha=.8, 
+                        axis=(1,0,0)
+                        )
 
+  Frame3 = link3_mesh + Frame3Arrows
   # Transform the part to position it at its correct location and orientation 
   Frame3.apply_transform(T_03)  
 
@@ -208,17 +227,18 @@ def main():
 
 
 
-  R_34 = RotationMatrix(phi4, axis_name='z')
-  p4 = np.array([[L3], [0.0], [0.0]])
-  t_34 = p4
-  T_34 = getLocalFrameMatrix(R_34, t_34)
-  T_04 = T_01 @ T_12 @ T_23 @ T_34
-  Frame4 = createCoordinateFrameMesh()
-  Frame4.apply_transform(T_04)
+  # R_34 = RotationMatrix(phi4, axis_name='z')
+  # p4 = np.array([[L3], [0.0], [0.0]])
+  # t_34 = p4
+  # T_34 = getLocalFrameMatrix(R_34, t_34)
+  # T_04 = T_01 @ T_12 @ T_23 @ T_34
+  # Frame4Arrows = createCoordinateFrameMesh()
+  # Frame4.apply_transform(T_04)
   
   
   # Show everything 
-  show([Frame1, Frame2, Frame3], axes, viewup="z").close()
+  # show([Frame1, Frame2, Frame3], axes, viewup="z").close()
+  show([base_mesh, Frame1], axes, viewup="z").close()
   
   
   
