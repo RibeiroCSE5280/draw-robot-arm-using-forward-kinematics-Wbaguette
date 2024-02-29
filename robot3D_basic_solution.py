@@ -34,7 +34,7 @@ def forward_kinematics(Phi, L1, L2, L3, L4):
    
    T_04 = T_03 @ T_34
    
-   e = T_04[:, 4][:3]
+   e = T_04[:, -1][:3]
    
    return T_01, T_02, T_03, T_04, e
    
