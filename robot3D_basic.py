@@ -125,7 +125,6 @@ def main():
                   height = 2,
                   c="green",
                   alpha=1,
-                  # axis=(1,0,0)
                   )
   
   
@@ -181,14 +180,16 @@ def main():
   # Now, let's create a cylinder and add it to the local coordinate frame
   link2_mesh = Cylinder(r=0.4, 
                         height=L2, 
-                        pos = (L2/2,0,0),
+                        pos = (L2/2 + r1*2,0,0),
                         c="red", 
                         alpha=.8, 
                         axis=(1,0,0)
                         )
   
+  sphere2 = Sphere(r=r1).pos(r1,0,0).color("gray").alpha(.8)
+  
   # Combine all parts into a single object 
-  Frame2 = Frame2Arrows + link2_mesh
+  Frame2 = Frame2Arrows + link2_mesh + sphere2
   
   # Transform the part to position it at its correct location and orientation 
   Frame2.apply_transform(T_02)  
@@ -208,23 +209,24 @@ def main():
   # Matrix of Frame 3 w.r.t. Frame 0 (i.e., the world frame)
   T_03 = T_01 @ T_12 @ T_23
   
-  # Create the coordinate frame mesh and transform. This point is the end-effector. So, I am 
-  # just creating the coordinate frame. 
+  # Create the coordinate frame mesh and transform.
   Frame3Arrows = createCoordinateFrameMesh()
   link3_mesh = Cylinder(r=0.4, 
                         height=L3, 
-                        pos = (L3/2,0,0),
+                        pos = (L3/2 + r1*2,0,0),
                         c="blue", 
                         alpha=.8, 
                         axis=(1,0,0)
                         )
-
-  Frame3 = link3_mesh + Frame3Arrows
+  
+  sphere3 = Sphere(r=r1).pos(r1,0,0).color("gray").alpha(.8)
+  
+  Frame3 = link3_mesh + Frame3Arrows + sphere3
   # Transform the part to position it at its correct location and orientation 
   Frame3.apply_transform(T_03)  
 
 
-
+  # end effector is here
 
 
   # R_34 = RotationMatrix(phi4, axis_name='z')
@@ -238,7 +240,7 @@ def main():
   
   # Show everything 
   # show([Frame1, Frame2, Frame3], axes, viewup="z").close()
-  show([base_mesh, Frame1], axes, viewup="z").close()
+  show([base_mesh, Frame1, Frame2, Frame3], axes, viewup="z").close()
   
   
   
