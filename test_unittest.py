@@ -1,14 +1,10 @@
 import unittest
 import importlib
-import importnb
 import numpy as np
-from importnb import imports
 #from importnb import Notebook, get_ipython, imports
 
 from unittest.mock import patch
 
-import cvxopt
-from cvxopt import matrix, printing
 
 from robot3D_basic_solution import forward_kinematics
 
