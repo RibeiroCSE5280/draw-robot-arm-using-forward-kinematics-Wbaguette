@@ -1,5 +1,5 @@
 from robot3D_basic import getLocalFrameMatrix, RotationMatrix
-import numbers as np
+import numpy as np
 
 def forward_kinematics(Phi, L1, L2, L3, L4):
    # Diameter of the spheres
