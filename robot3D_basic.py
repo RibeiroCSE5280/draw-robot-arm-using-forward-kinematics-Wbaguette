@@ -1,5 +1,6 @@
 from vedo import *
 import numpy as np
+import time
 
 def RotationMatrix(theta, axis_name):
     """ calculate single rotation of $theta$ matrix around x,y or z
@@ -102,24 +103,8 @@ def getLocalFrameMatrix(R_ij, t_ij):
     return T_ij
   
 
-def main():
-
-  # Set the limits of the graph x, y, and z ranges 
-  axes = Axes(xrange=(0,25), yrange=(-2,12), zrange=(0,6))
-
-  radius = 0.4      # Radius of sphere joints
-  
-  # Lengths of arm parts 
-  L1 = 5 # Length of link 1
-  L2 = 8 # Length of link 2
-  L3 = 3 # Length of link 3 
-
-  # Joint angles 
-  angles = [30, -10, 15, 0]
-  phi1, phi2, phi3, phi4 = angles
-  
-  # begin = forward_kinematics(angles, L1=L1, L2=L2, L3=L3, L4=0)
-  
+def fk(radius, Phi, L1, L2, L3, L4):
+  phi1, phi2, phi3, phi4 = Phi
   # Make a base in order to better visualize stuff
   base_mesh = Box(pos=(3, 0.7, 0),
                   length = 2,
@@ -132,7 +117,7 @@ def main():
   # Create the coordinate frame mesh and transform
   Frame1Arrows = createCoordinateFrameMesh()
   # Matrix of Frame 1 (written w.r.t. Frame 0, which is the previous frame) 
-  R_01 = RotationMatrix(phi1, axis_name = 'z')   # Rotation matrix
+  R_01 = RotationMatrix(phi1, axis_name = 'x')   # Rotation matrix
   p1 = np.array([[3], [2], [0.0]])                # Frame's origin (w.r.t. previous frame)
   t_01 = p1                                      # Translation vector
   
@@ -165,7 +150,7 @@ def main():
   # Create the coordinate frame mesh and transform
   Frame2Arrows = createCoordinateFrameMesh()
   # Matrix of Frame 2 (written w.r.t. Frame 1, which is the previous frame) 	
-  R_12 = RotationMatrix(phi2, axis_name = 'z')   # Rotation matrix
+  R_12 = RotationMatrix(phi2, axis_name = 'y')   # Rotation matrix
   p2 = np.array([[L1 + (2*radius)],[0.0], [0.0]])           # Frame's origin (w.r.t. previous frame)
   t_12 = p2                                      # Translation vector
   
@@ -239,15 +224,47 @@ def main():
   
   end_effector.apply_transform(T_04)
   
+  return base_mesh, Frame1, Frame2, Frame3, end_effector
   
-  # Show everything 
-  show([base_mesh, Frame1, Frame2, Frame3, end_effector], axes, viewup="z").close()
-  # show([base_mesh, Frame1, Frame2, Frame3], axes, viewup="z").close()
-  
-  
-  
+def main():
 
+  RECORD_VIDEO = False
+  
+  # Set the limits of the graph x, y, and z ranges 
+  axes = Axes(xrange=(0,25), yrange=(-2,12), zrange=(0,6))
 
+  radius = 0.4      # Radius of sphere joints
+  
+  # Lengths of arm parts 
+  L1 = 5 # Length of link 1
+  L2 = 8 # Length of link 2
+  L3 = 3 # Length of link 3 
+  
+  plotter = Plotter(axes=10, interactive=True)
+  
+  # Joint angles 
+  angles = [20, -10, 15, 0]
+  mesh = fk(radius=radius, Phi=angles, L1=L1, L2=L2, L3=L3, L4=0)
+  if RECORD_VIDEO:
+    print("RECORDING VIDEO!!!")
+    video = Video("robot.mp4", fps=2, duration=5, backend="opencv")
+    video.action()
+    plotter.show(mesh, viewup="y", axes=axes)
+    for i in range(40):
+      angles = [angle * (i+2) for angle in angles]
+      mesh = fk(radius=radius, Phi=angles, L1=L1, L2=L2, L3=L3, L4=0)
+      plotter.clear()
+      plotter.show(mesh, viewup="y", axes=axes)
+      time.sleep(0.5)
+      video.add_frame()
+    
+    video.close()
+  else:
+    print("The robot ain't moving.")
+    # Show everything 
+    show(mesh, axes, viewup="y").close()
+  
+  
 
 if __name__ == '__main__':
     main()
